@@ -20,6 +20,8 @@ LIBS = -L $(LIBFT) -lft\
 SRCS = list.c\
 	   sort.c\
 	   print.c\
+	   parse_flags.c\
+	   compare.c\
 
 TESTS = *.test.cpp
 

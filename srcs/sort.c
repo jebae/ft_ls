@@ -47,7 +47,7 @@ static t_node	*merge_sort(t_node *node, t_cmp cmp)
 		node = node->next;
 	}
 	node->next = (l1) ? l1 : l2;
-	return sentinel.next;
+	return (sentinel.next);
 }
 
 void			sort_list(t_list *list, t_cmp cmp)
