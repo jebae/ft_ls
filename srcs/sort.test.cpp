@@ -30,7 +30,7 @@ TEST(sort_list, even_length)
 		char *name = (char *)malloc(strlen(names[i]) + 1);
 
 		strcpy(name, names[i]);
-		add_node(name, &st, &list);
+		add_node(name, name, &st, &list);
 	}
 
 	sort_list(&list, cmp);
@@ -65,7 +65,7 @@ TEST(sort_list, odd_length)
 		char *name = (char *)malloc(strlen(names[i]) + 1);
 
 		strcpy(name, names[i]);
-		add_node(name, &st, &list);
+		add_node(name, name, &st, &list);
 	}
 
 	sort_list(&list, cmp);
@@ -98,7 +98,7 @@ TEST(sort_list, _1_length)
 		char *name = (char *)malloc(strlen(names[i]) + 1);
 
 		strcpy(name, names[i]);
-		add_node(name, &st, &list);
+		add_node(name, name, &st, &list);
 	}
 
 	sort_list(&list, cmp);

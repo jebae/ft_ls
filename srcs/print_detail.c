@@ -21,27 +21,32 @@ static void		print_file_type(mode_t mode, t_context *ctx)
 		ctx->print("?");
 }
 
-static void		print_permission(mode_t mode, t_context *ctx)
+static void		print_permission_and_xattr(
+		mode_t mode, char *path, t_context *ctx)
 {
-	char	s[10];
+	char	s[1024];
 
 	s[0] = (mode & S_IRUSR) ? 'r' : '-';
 	s[1] = (mode & S_IWUSR) ? 'w' : '-';
 	s[2] = (mode & S_IXUSR) ? 'x' : '-';
 	if (mode & S_ISUID)
-		s[2] = (mode & S_IXUSR) ? 's' : 'S'; 
+		s[2] = (mode & S_IXUSR) ? 's' : 'S';
 	s[3] = (mode & S_IRGRP) ? 'r' : '-';
 	s[4] = (mode & S_IWGRP) ? 'w' : '-';
 	s[5] = (mode & S_IXGRP) ? 'x' : '-';
 	if (mode & S_ISGID)
-		s[5] =  (mode & S_IXGRP) ? 's' : 'S'; 
+		s[5] = (mode & S_IXGRP) ? 's' : 'S';
 	s[6] = (mode & S_IROTH) ? 'r' : '-';
 	s[7] = (mode & S_IWOTH) ? 'w' : '-';
 	s[8] = (mode & S_IXOTH) ? 'x' : '-';
 	if (mode & S_ISVTX)
-		s[8] = (mode & S_IXOTH) ? 't' : 'T'; 
+		s[8] = (mode & S_IXOTH) ? 't' : 'T';
 	s[9] = '\0';
 	ctx->print("%s", s);
+	if (listxattr(path, s, 1024, XATTR_SHOWCOMPRESSION) > 0)
+		ctx->print("@");
+	else
+		ctx->print(" ");
 }
 
 static void		print_owner_and_group(
@@ -64,41 +69,53 @@ static void		print_owner_and_group(
 
 static void		print_last_modified(time_t modified_at, t_context *ctx)
 {
-	char	*date;
+	char		*date;
+	time_t		today;
+	t_timedelta	td;
 
-	date = ctime(&modified_at);
-	if (date)
+	if (time(&today) != -1 && timedelta(modified_at, today, &td) != -1)
 	{
-		date[16] = '\0';
-		ctx->print(" %s", date + 4);
+		date = ctime(&modified_at);
+		if (date != NULL)
+		{
+			if (td.year >= 1 || td.month >= 6)
+			{
+				date[10] = '\0';
+				date[24] = '\0';
+				ctx->print(" %s  %s", date + 4, date + 20);
+			}
+			else
+			{
+				date[16] = '\0';
+				ctx->print(" %s", date + 4);
+			}
+			return ;
+		}
 	}
-	else
-		ctx->print("             ");
+	ctx->print("             ");
 }
 
-int				print_detail(
-		char *name, t_stat *st, t_col_width *w, t_context *ctx)
+void			print_detail(t_node *node, t_col_width *w, t_context *ctx)
 {
-	char	*ptr;
 	char	link[4097];
+	int		r;
+	t_stat	*st;
 
+	st = &node->st;
 	print_file_type(st->st_mode, ctx);
-	print_permission(st->st_mode, ctx);
-	ctx->print("  %*d", w->link, st->st_nlink);
+	print_permission_and_xattr(st->st_mode, node->path, ctx);
+	ctx->print(" %*hu", w->link, st->st_nlink);
 	print_owner_and_group(st, w, ctx);
 	ctx->print("  %*lld", w->size, st->st_size);
 	print_last_modified(st->st_mtime, ctx);
-	ptr = name;
-	while (*ptr != '\0')
-		ptr++;
-	while (ptr > name && *ptr != '/')
-		ptr--;
-	ctx->print(" %s", (*ptr == '/') ? ptr + 1 : name);
+	ctx->print(" %s", node->name);
 	if ((st->st_mode & S_IFMT) == S_IFLNK)
 	{
-		readlink(name, link, 4096);
-		ctx->print(" -> %s", link);
+		if ((r = readlink(node->path, link, 4096)) != -1)
+		{
+			link[r] = '\0';
+			ctx->print(" -> %s", link);
+		}
 	}
-	ft_putchar('\n');
-	return (TRUE);
+	ctx->print("\n");
 }

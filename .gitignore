@@ -2,3 +2,5 @@ practices
 .*.sw*
 *.out
 test
+ft_ls
+objs

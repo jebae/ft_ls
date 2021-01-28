@@ -10,11 +10,6 @@ static t_cmp	get_compare_func(int is_reverse, int sort_by_modified_at)
 
 int				parse_flags(char *arg, t_context *ctx)
 {
-	int		is_reverse;
-	int		sort_by_modified_at;
-
-	is_reverse = FALSE;
-	sort_by_modified_at = FALSE;
 	while (*arg != '\0')
 	{
 		if (*arg == 'l')
@@ -24,13 +19,17 @@ int				parse_flags(char *arg, t_context *ctx)
 		else if (*arg == 'a')
 			ctx->flag |= FLAG_PRINT_HIDDEN;
 		else if (*arg == 'r')
-			is_reverse = TRUE;
+			ctx->flag |= FLAG_SORT_REVERSE;
 		else if (*arg == 't')
-			sort_by_modified_at = TRUE;
+			ctx->flag |= FLAG_SORT_BY_MODIFIED_AT;
 		else
-			return (FALSE);
+		{
+			err_invalid_option(*arg);
+			return (-1);
+		}
 		arg++;
 	}
-	ctx->cmp = get_compare_func(is_reverse, sort_by_modified_at);
-	return (TRUE);
+	ctx->cmp = get_compare_func(ctx->flag & FLAG_SORT_REVERSE,
+			ctx->flag & FLAG_SORT_BY_MODIFIED_AT);
+	return (0);
 }

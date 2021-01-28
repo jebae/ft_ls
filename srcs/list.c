@@ -14,20 +14,21 @@ void	free_list(t_list *list)
 	while (node)
 	{
 		next = node->next;
-		ft_memdel((void **)&node->name);
+		ft_memdel((void **)&node->path);
 		ft_memdel((void **)&node);
 		node = next;
 	}
 }
 
-int		add_node(char *name, t_stat *st, t_list *list)
+int		add_node(char *path, char *name, t_stat *st, t_list *list)
 {
 	t_node	*node;
 
 	node = (t_node *)ft_memalloc(sizeof(t_node));
 	if (node == NULL)
-		return (FALSE);
+		return (-1);
 	node->next = NULL;
+	node->path = path;
 	node->name = name;
 	node->st = *st;
 	if (list->len == 0)
@@ -36,5 +37,25 @@ int		add_node(char *name, t_stat *st, t_list *list)
 		list->tail->next = node;
 	list->tail = node;
 	list->len++;
-	return (TRUE);
+	return (0);
+}
+
+t_node	*list_to_arr(t_list *list)
+{
+	int		i;
+	t_node	*arr;
+	t_node	*node;
+
+	arr = (t_node *)ft_memalloc(sizeof(t_node) * list->len);
+	if (arr == NULL)
+		return (NULL);
+	i = 0;
+	node = list->head;
+	while (node)
+	{
+		arr[i] = *node;
+		node = node->next;
+		i++;
+	}
+	return (arr);
 }

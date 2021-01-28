@@ -12,14 +12,22 @@ int		lexical_desc(t_node *n1, t_node *n2)
 
 int		modified_at_asc(t_node *n1, t_node *n2)
 {
-	if (n1->st.st_mtime == n2->st.st_mtime)
-		return (lexical_desc(n1, n2));
-	return (n1->st.st_mtime > n2->st.st_mtime);
+	if (n1->st.st_mtimespec.tv_sec == n2->st.st_mtimespec.tv_sec)
+	{
+		if (n1->st.st_mtimespec.tv_nsec == n2->st.st_mtimespec.tv_nsec)
+			return (lexical_desc(n1, n2));
+		return (n1->st.st_mtimespec.tv_nsec > n2->st.st_mtimespec.tv_nsec);
+	}
+	return (n1->st.st_mtimespec.tv_sec > n2->st.st_mtimespec.tv_sec);
 }
 
 int		modified_at_desc(t_node *n1, t_node *n2)
 {
-	if (n1->st.st_mtime == n2->st.st_mtime)
-		return (lexical_asc(n1, n2));
-	return (n1->st.st_mtime < n2->st.st_mtime);
+	if (n1->st.st_mtimespec.tv_sec == n2->st.st_mtimespec.tv_sec)
+	{
+		if (n1->st.st_mtimespec.tv_nsec == n2->st.st_mtimespec.tv_nsec)
+			return (lexical_asc(n1, n2));
+		return (n1->st.st_mtimespec.tv_nsec < n2->st.st_mtimespec.tv_nsec);
+	}
+	return (n1->st.st_mtimespec.tv_sec < n2->st.st_mtimespec.tv_sec);
 }

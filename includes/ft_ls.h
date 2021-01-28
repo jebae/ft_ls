@@ -2,11 +2,13 @@
 # define FT_LS_H
 
 # include <sys/stat.h>
+# include <sys/ioctl.h>
+# include <sys/errno.h>
+# include <sys/xattr.h>
 # include <pwd.h>
 # include <grp.h>
 # include <time.h>
 # include <dirent.h>
-# include <stdio.h>
 #ifdef __cplusplus
 extern "C"
 {
@@ -17,60 +19,98 @@ extern "C"
 }
 #endif
 
-# define TRUE				1
-# define FALSE				0
-# define FLAG_PRINT_DETAIL	0x01
-# define FLAG_RECURSIVE		0x02
-# define FLAG_PRINT_HIDDEN	0x04
+# define TRUE						1
+# define FALSE						0
+# define FLAG_PRINT_DETAIL			0x01
+# define FLAG_RECURSIVE				0x02
+# define FLAG_PRINT_HIDDEN			0x04
+# define FLAG_SORT_REVERSE			0x08
+# define FLAG_SORT_BY_MODIFIED_AT	0x10
 
-typedef struct	stat	t_stat;
+typedef struct stat			t_stat;
 
-typedef struct			s_node
+typedef struct				s_node
 {
+	char			*path;
 	char			*name;
 	t_stat			st;
 	struct s_node	*next;
-}						t_node;
+}							t_node;
 
-typedef struct			s_list
+typedef struct				s_list
 {
-	char	len;
+	int		len;
 	t_node	*head;
 	t_node	*tail;
-}						t_list;
+}							t_list;
 
-typedef int				(*t_print)(const char *format, ...);
-typedef int				(*t_cmp)(t_node *n1, t_node *n2);
+typedef int					(*t_print)(const char *format, ...);
+typedef int					(*t_cmp)(t_node *n1, t_node *n2);
 
-typedef struct			s_context
+typedef struct				s_context
 {
-	int		flag;
-	t_cmp	cmp;
-	t_print	print;
-}						t_context;
+	int				flag;
+	int				terminal_width;
+	t_cmp			cmp;
+	t_print			print;
+}							t_context;
 
-typedef struct			s_col_width
+typedef struct				s_col_width
 {
-	int	link;
-	int	owner;
-	int	group;
-	int	size;
-}						t_col_width;
+	int		link;
+	int		owner;
+	int		group;
+	int		size;
+}							t_col_width;
 
-void					init_list(t_list *list);
-void					free_list(t_list *list);
-int						add_node(char *name, t_stat *st, t_list *list);
+char						*get_pure_name(char *path);
 
-void					sort_list(t_list *list, t_cmp cmp);
+void						init_list(t_list *list);
+void						free_list(t_list *list);
+int							add_node(
+		char *path, char *name, t_stat *st, t_list *list);
+t_node						*list_to_arr(t_list *list);
 
-int						print_detail(
-		char *name, t_stat *st, t_col_width *w, t_context *ctx);
+void						sort_list(t_list *list, t_cmp cmp);
 
-int						lexical_asc(t_node *n1, t_node *n2);
-int						lexical_desc(t_node *n1, t_node *n2);
-int						modified_at_asc(t_node *n1, t_node *n2);
-int						modified_at_desc(t_node *n1, t_node *n2);
+void						print_detail(
+		t_node *node, t_col_width *w, t_context *ctx);
 
-int						parse_flags(char *arg, t_context *ctx);
+int							lexical_asc(t_node *n1, t_node *n2);
+int							lexical_desc(t_node *n1, t_node *n2);
+int							modified_at_asc(t_node *n1, t_node *n2);
+int							modified_at_desc(t_node *n1, t_node *n2);
+
+int							parse_flags(char *arg, t_context *ctx);
+
+int							get_entry_list(
+		char *path, t_list *list, int include_hidden, size_t *total_block_size);
+
+void						get_aggregate_data(t_col_width *w, t_list *list);
+int							get_longest_name_length(t_list *list);
+
+int							get_rows(
+		int col_width, int terminal_width, int num_files);
+int							get_terminal_width(void);
+
+int							print_list(t_list *list, t_context *ctx);
+
+int							visit(
+		t_node *node, int show_dir_name, t_context *ctx);
+int							visit_current_dir(t_context *ctx);
+
+void						init_context(t_context *ctx);
+
+void						err(char *name);
+void						err_invalid_option(char invalid);
+
+void						init_lists(
+		t_list *file_list, t_list *dir_list, t_list *invalid_list);
+void						free_lists(
+		t_list *file_list, t_list *dir_list, t_list *invalid_list);
+int							classify_file(char *arg,
+		t_list *file_list, t_list *dir_list, t_list *invalid_list);
+int							handle_classified_lists(t_list *file_list,
+		t_list *dir_list, t_list *invalid_list, t_context *ctx);
 
 #endif
