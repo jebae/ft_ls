@@ -9,21 +9,25 @@ static int	err_with_free(
 
 /*
 ** return value:
-**  1 : no error, flag not exist
-**  2 : no error, flag exist
 ** -1 : error
+** else: index after flag args
 */
 
 static int	set_context(int argc, char **argv, t_context *ctx)
 {
+	int	i;
+
 	init_context(ctx);
-	if (argc > 1 && argv[1][0] == '-')
+	i = 1;
+	while (i < argc)
 	{
-		if (parse_flags(argv[1] + 1, ctx) == -1)
+		if (argv[i][0] != '-')
+			break ;
+		if (parse_flags(argv[i] + 1, ctx) == -1)
 			return (-1);
-		return (2);
+		i++;
 	}
-	return (1);
+	return (i);
 }
 
 int			main(int argc, char **argv)
