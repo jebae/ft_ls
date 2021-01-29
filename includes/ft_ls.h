@@ -9,6 +9,7 @@
 # include <grp.h>
 # include <time.h>
 # include <dirent.h>
+# include <stdio.h>
 #ifdef __cplusplus
 extern "C"
 {
