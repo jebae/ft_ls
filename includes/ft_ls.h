@@ -45,6 +45,13 @@ typedef struct				s_list
 	t_node	*tail;
 }							t_list;
 
+typedef struct				s_root_list
+{
+	t_list	file;
+	t_list	dir;
+	t_list	invalid;
+}							t_root_list;
+
 typedef int					(*t_print)(const char *format, ...);
 typedef int					(*t_cmp)(t_node *n1, t_node *n2);
 
@@ -105,13 +112,11 @@ void						init_context(t_context *ctx);
 void						err(char *name);
 void						err_invalid_option(char invalid);
 
-void						init_lists(
-		t_list *file_list, t_list *dir_list, t_list *invalid_list);
-void						free_lists(
-		t_list *file_list, t_list *dir_list, t_list *invalid_list);
-int							classify_file(char *arg,
-		t_list *file_list, t_list *dir_list, t_list *invalid_list);
-int							handle_classified_lists(t_list *file_list,
-		t_list *dir_list, t_list *invalid_list, t_context *ctx);
+void						init_root_list(t_root_list *lists);
+void						free_root_list(t_root_list *lists);
+int							classify_file(
+		char *str, t_root_list *lists, t_context *ctx);
+int							handle_classified_lists(
+		t_root_list *lists, t_context *ctx);
 
 #endif

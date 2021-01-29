@@ -423,7 +423,7 @@ TEST(print_detail, filename_with_link)
 	t_node			node;
 	const char		*path = "./foo";
 
-	symlink("../../bar",path);
+	symlink("../../bar", path);
 	init_buf();
 	memset(&node, 0, sizeof(t_node));
 	ctx.print = print4test;

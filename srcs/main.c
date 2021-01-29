@@ -1,9 +1,8 @@
 #include "ft_ls.h"
 
-static int	err_with_free(
-		t_list *file_list, t_list *dir_list, t_list *invalid_list)
+static int	err_with_free(t_root_list *lists)
 {
-	free_lists(file_list, dir_list, invalid_list);
+	free_root_list(lists);
 	return (1);
 }
 
@@ -34,25 +33,22 @@ int			main(int argc, char **argv)
 {
 	int			i;
 	t_context	ctx;
-	t_list		file_list;
-	t_list		dir_list;
-	t_list		invalid_list;
+	t_root_list	lists;
 
 	i = set_context(argc, argv, &ctx);
 	if (i == -1)
 		return (1);
 	if (i == argc)
 		return (visit_current_dir(&ctx) == -1);
-	init_lists(&file_list, &dir_list, &invalid_list);
+	init_root_list(&lists);
 	while (i < argc)
 	{
-		if (classify_file(argv[i], &file_list, &dir_list, &invalid_list) == -1)
-			return (err_with_free(&file_list, &dir_list, &invalid_list));
+		if (classify_file(argv[i], &lists, &ctx) == -1)
+			return (err_with_free(&lists));
 		i++;
 	}
-	if (handle_classified_lists(
-			&file_list, &dir_list, &invalid_list, &ctx) == -1)
-		return (err_with_free(&file_list, &dir_list, &invalid_list));
-	free_lists(&file_list, &dir_list, &invalid_list);
+	if (handle_classified_lists(&lists, &ctx) == -1)
+		return (err_with_free(&lists));
+	free_root_list(&lists);
 	return (errno != 0);
 }
