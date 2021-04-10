@@ -50,7 +50,7 @@ static t_node	*merge_sort(t_node *node, t_cmp cmp)
 	return (sentinel.next);
 }
 
-void			sort_list(t_list *list, t_cmp cmp)
+void			sort_list(t_flist *list, t_cmp cmp)
 {
 	t_node	*node;
 

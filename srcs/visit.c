@@ -1,12 +1,12 @@
 #include "ft_ls.h"
 
-static int		err_with_free(t_list *list)
+static int		err_with_free(t_flist *list)
 {
 	free_list(list);
 	return (-1);
 }
 
-static int		recurse(t_list *list, t_context *ctx)
+static int		recurse(t_flist *list, t_context *ctx)
 {
 	t_node	*node;
 
@@ -28,12 +28,12 @@ static int		recurse(t_list *list, t_context *ctx)
 
 int				visit(t_node *node, int show_dir_name, t_context *ctx)
 {
-	t_list	list;
+	t_flist	list;
 	size_t	total_block_size;
 
 	if (show_dir_name)
 		ctx->print("%s:\n", node->path);
-	init_list(&list);
+	init_flist(&list);
 	total_block_size = 0;
 	if (get_entry_list(node->path, &list, ctx->flag & FLAG_PRINT_HIDDEN,
 			&total_block_size) == -1)

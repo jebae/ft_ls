@@ -4,12 +4,12 @@
 
 TEST(add_node, add_to_empty_list)
 {
-	t_list		list;
+	t_flist		list;
 	t_stat		st;
 	const char	*str = "./foo/bar";
 	char		*path;
 
-	init_list(&list);
+	init_flist(&list);
 	path = (char *)malloc(strlen(str) + 1);
 	strcpy(path, str);
 
@@ -24,7 +24,7 @@ TEST(add_node, add_to_empty_list)
 
 TEST(add_node, add_to_non_empty_list)
 {
-	t_list		list;
+	t_flist		list;
 	t_stat		st;
 	const char	*s1 = "./foo/bar";
 	const char	*s2 = "./go/lang";
@@ -33,7 +33,7 @@ TEST(add_node, add_to_non_empty_list)
 	char		*path2;
 	char		*path3;
 
-	init_list(&list);
+	init_flist(&list);
 
 	path1 = (char *)malloc(strlen(s1) + 1);
 	path2 = (char *)malloc(strlen(s2) + 1);
@@ -55,7 +55,7 @@ TEST(add_node, add_to_non_empty_list)
 
 TEST(list_to_arr, should_have_same_data)
 {
-	t_list	list;
+	t_flist	list;
 	t_node	node[5];
 	const char	*paths[5] = {
 		"./toystory/buzz"
@@ -74,7 +74,7 @@ TEST(list_to_arr, should_have_same_data)
 	t_node	*arr;
 	int		len;
 
-	init_list(&list);
+	init_flist(&list);
 	len = (int)(sizeof(node) / sizeof(t_node));
 	for (int i=0; i < len - 1; i++)
 	{

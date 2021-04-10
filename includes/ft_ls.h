@@ -38,18 +38,18 @@ typedef struct				s_node
 	struct s_node	*next;
 }							t_node;
 
-typedef struct				s_list
+typedef struct				s_flist
 {
 	int		len;
 	t_node	*head;
 	t_node	*tail;
-}							t_list;
+}							t_flist;
 
 typedef struct				s_root_list
 {
-	t_list	file;
-	t_list	dir;
-	t_list	invalid;
+	t_flist	file;
+	t_flist	dir;
+	t_flist	invalid;
 }							t_root_list;
 
 typedef int					(*t_print)(const char *format, ...);
@@ -73,13 +73,13 @@ typedef struct				s_col_width
 
 char						*get_pure_name(char *path);
 
-void						init_list(t_list *list);
-void						free_list(t_list *list);
+void						init_flist(t_flist *list);
+void						free_list(t_flist *list);
 int							add_node(
-		char *path, char *name, t_stat *st, t_list *list);
-t_node						*list_to_arr(t_list *list);
+		char *path, char *name, t_stat *st, t_flist *list);
+t_node						*list_to_arr(t_flist *list);
 
-void						sort_list(t_list *list, t_cmp cmp);
+void						sort_list(t_flist *list, t_cmp cmp);
 
 void						print_detail(
 		t_node *node, t_col_width *w, t_context *ctx);
@@ -92,16 +92,16 @@ int							modified_at_desc(t_node *n1, t_node *n2);
 int							parse_flags(char *arg, t_context *ctx);
 
 int							get_entry_list(
-		char *path, t_list *list, int include_hidden, size_t *total_block_size);
+		char *path, t_flist *list, int include_hidden, size_t *total_block_size);
 
-void						get_aggregate_data(t_col_width *w, t_list *list);
-int							get_longest_name_length(t_list *list);
+void						get_aggregate_data(t_col_width *w, t_flist *list);
+int							get_longest_name_length(t_flist *list);
 
 int							get_rows(
 		int col_width, int terminal_width, int num_files);
 int							get_terminal_width(void);
 
-int							print_list(t_list *list, t_context *ctx);
+int							print_list(t_flist *list, t_context *ctx);
 
 int							visit(
 		t_node *node, int show_dir_name, t_context *ctx);

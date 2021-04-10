@@ -35,7 +35,7 @@ static int		get_group_len(uid_t id)
 	return (get_digit_len(id));
 }
 
-void			get_aggregate_data(t_col_width *w, t_list *list)
+void			get_aggregate_data(t_col_width *w, t_flist *list)
 {
 	t_node		*node;
 	int			len;
@@ -56,7 +56,7 @@ void			get_aggregate_data(t_col_width *w, t_list *list)
 	}
 }
 
-int				get_longest_name_length(t_list *list)
+int				get_longest_name_length(t_flist *list)
 {
 	t_node	*node;
 	int		longest;

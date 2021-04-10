@@ -25,7 +25,7 @@ static int	is_hidden(char *name)
 ** -1 : error, not added
 */
 
-static int	add_entry(char *name, char *path, t_list *list,
+static int	add_entry(char *name, char *path, t_flist *list,
 		size_t *total_block_size)
 {
 	int		len_dir;
@@ -52,7 +52,7 @@ static int	add_entry(char *name, char *path, t_list *list,
 }
 
 int			get_entry_list(
-		char *path, t_list *list, int include_hidden, size_t *total_block_size)
+		char *path, t_flist *list, int include_hidden, size_t *total_block_size)
 {
 	DIR				*dir;
 	struct dirent	*entry;

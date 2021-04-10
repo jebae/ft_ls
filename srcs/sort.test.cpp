@@ -15,7 +15,7 @@ static int		cmp(t_node *n1, t_node *n2)
 
 TEST(sort_list, even_length)
 {
-	t_list		list;
+	t_flist		list;
 	t_node		*prev;
 	t_node		*node;
 	t_stat		st;
@@ -23,8 +23,8 @@ TEST(sort_list, even_length)
 		"c", "f", "a", "d", "b", "e",
 	};
 	int			count = 1;
-	
-	init_list(&list);
+
+	init_flist(&list);
 	for (int i=0; i < (int)(sizeof(names) / sizeof(char *)); i++)
 	{
 		char *name = (char *)malloc(strlen(names[i]) + 1);
@@ -50,7 +50,7 @@ TEST(sort_list, even_length)
 
 TEST(sort_list, odd_length)
 {
-	t_list		list;
+	t_flist		list;
 	t_node		*prev;
 	t_node		*node;
 	t_stat		st;
@@ -58,8 +58,8 @@ TEST(sort_list, odd_length)
 		"c", "f", "a", "d", "b",
 	};
 	int			count = 1;
-	
-	init_list(&list);
+
+	init_flist(&list);
 	for (int i=0; i < (int)(sizeof(names) / sizeof(char *)); i++)
 	{
 		char *name = (char *)malloc(strlen(names[i]) + 1);
@@ -86,13 +86,13 @@ TEST(sort_list, odd_length)
 // expected no seg fault
 TEST(sort_list, _1_length)
 {
-	t_list		list;
+	t_flist		list;
 	t_stat		st;
 	const char	*names[] = {
 		"a",
 	};
-	
-	init_list(&list);
+
+	init_flist(&list);
 	for (int i=0; i < (int)(sizeof(names) / sizeof(char *)); i++)
 	{
 		char *name = (char *)malloc(strlen(names[i]) + 1);
@@ -108,9 +108,9 @@ TEST(sort_list, _1_length)
 // expected no seg fault
 TEST(sort_list, _0_length)
 {
-	t_list		list;
-	
-	init_list(&list);
+	t_flist		list;
+
+	init_flist(&list);
 	sort_list(&list, cmp);
 	free_list(&list);
 }

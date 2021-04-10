@@ -2,9 +2,9 @@
 
 void		init_root_list(t_root_list *lists)
 {
-	init_list(&lists->file);
-	init_list(&lists->dir);
-	init_list(&lists->invalid);
+	init_flist(&lists->file);
+	init_flist(&lists->dir);
+	init_flist(&lists->invalid);
 }
 
 void		free_root_list(t_root_list *lists)
@@ -18,7 +18,7 @@ int			classify_file(char *str, t_root_list *lists, t_context *ctx)
 {
 	char	*path;
 	t_stat	st;
-	t_list	*list;
+	t_flist	*list;
 
 	path = (char *)ft_strdup(str);
 	if (path == NULL)
@@ -38,7 +38,7 @@ int			classify_file(char *str, t_root_list *lists, t_context *ctx)
 	return (0);
 }
 
-static void	handle_invalid_list(t_list *list)
+static void	handle_invalid_list(t_flist *list)
 {
 	t_node	*node;
 	t_stat	st;

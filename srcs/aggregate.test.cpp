@@ -3,7 +3,7 @@
 
 TEST(get_aggregate_data, link)
 {
-	t_list		list;
+	t_flist		list;
 	t_node		node[5];
 	int			len;
 	t_col_width	w;
@@ -28,7 +28,7 @@ TEST(get_aggregate_data, link)
 
 TEST(get_aggregate_data, size)
 {
-	t_list		list;
+	t_flist		list;
 	t_node		node[5];
 	int			len;
 	t_col_width	w;
@@ -53,7 +53,7 @@ TEST(get_aggregate_data, size)
 
 TEST(get_longest_name_length, normal_case)
 {
-	t_list		list;
+	t_flist		list;
 	t_node		node[5];
 	const char	*names[5] = {
 		"a",

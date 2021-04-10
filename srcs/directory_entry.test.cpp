@@ -20,10 +20,10 @@ TEST(get_entry_list, visible_files)
 	};
 	int			fd;
 	size_t		total;
-	t_list		list;
+	t_flist		list;
 	t_node		*node;
 
-	init_list(&list);
+	init_flist(&list);
 
 	// make directory for test
 	mkdir(dirname, 0755);
@@ -107,10 +107,10 @@ TEST(get_entry_list, with_hidden_files)
 	};
 	int			fd;
 	size_t		total;
-	t_list		list;
+	t_flist		list;
 	t_node		*node;
 
-	init_list(&list);
+	init_flist(&list);
 
 	// make directory for test
 	mkdir(dirname, 0755);
@@ -180,9 +180,9 @@ TEST(get_entry_list, directory_not_exist)
 {
 	const char	*dirname = "./not_exist";
 	size_t		total;
-	t_list		list;
+	t_flist		list;
 
-	init_list(&list);
+	init_flist(&list);
 	ASSERT_NE(get_entry_list((char *)dirname, &list, TRUE, &total), -1);
 	ASSERT_EQ(list.len, 0);
 }

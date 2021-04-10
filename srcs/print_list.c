@@ -1,6 +1,6 @@
 #include "ft_ls.h"
 
-static int	print_detail_list(t_list *list, t_context *ctx)
+static int	print_detail_list(t_flist *list, t_context *ctx)
 {
 	t_col_width	w;
 	t_node		*node;
@@ -15,7 +15,7 @@ static int	print_detail_list(t_list *list, t_context *ctx)
 	return (0);
 }
 
-static int	print_simple_list(t_list *list, t_context *ctx)
+static int	print_simple_list(t_flist *list, t_context *ctx)
 {
 	int		col_width;
 	int		rows;
@@ -44,7 +44,7 @@ static int	print_simple_list(t_list *list, t_context *ctx)
 	return (0);
 }
 
-int			print_list(t_list *list, t_context *ctx)
+int			print_list(t_flist *list, t_context *ctx)
 {
 	if (ctx->flag & FLAG_PRINT_DETAIL)
 		return (print_detail_list(list, ctx));

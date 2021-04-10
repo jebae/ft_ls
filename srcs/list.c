@@ -1,11 +1,11 @@
 #include "ft_ls.h"
 
-void	init_list(t_list *list)
+void	init_flist(t_flist *list)
 {
-	ft_memset(list, 0, sizeof(t_list));
+	ft_memset(list, 0, sizeof(t_flist));
 }
 
-void	free_list(t_list *list)
+void	free_list(t_flist *list)
 {
 	t_node	*node;
 	t_node	*next;
@@ -20,7 +20,7 @@ void	free_list(t_list *list)
 	}
 }
 
-int		add_node(char *path, char *name, t_stat *st, t_list *list)
+int		add_node(char *path, char *name, t_stat *st, t_flist *list)
 {
 	t_node	*node;
 
@@ -40,7 +40,7 @@ int		add_node(char *path, char *name, t_stat *st, t_list *list)
 	return (0);
 }
 
-t_node	*list_to_arr(t_list *list)
+t_node	*list_to_arr(t_flist *list)
 {
 	int		i;
 	t_node	*arr;
